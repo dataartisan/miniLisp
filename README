@@ -1,0 +1,24 @@
+
+In this project, you will extend project 1c to include a very simple, general mechanism for expressing nonlinear data structures. 
+
+To implement this mechanism, you will first add three branches to your abstract syntax:
+
+    Cell: this constructor takes two arguments, both of which are arbitrary expressions. Thus, Cell allows you to build not only lists but, by using another Cell value as the first argument, arbitrarily nested tree structures. Note that we will not add a separate Nil value because we can already express Nil using existing constructs. (In LISP, these cells are known as Cons cells, but we call this branch Cell for easier distinction from Const.)
+    Car and Cdr: each of these destructors takes one argument, which is an arbitrary expression.
+
+Next you will extend your evaluation function to support the additional syntax as follows:
+
+    A Cell evaluates to a new Cell whose children are the results of evaluating the corresponding children of the original unevaluated Cell cell.
+    Car assumes that the child evaluates to a Cell and then returns the first child of the Cell.
+    Cdr assumes that the child evaluates to a Cell and then returns the second child of the Cell.
+
+Examples
+eval (Cell(Plus(Const 3, Const 7), Const 5)) Map.empty -> Cell(Const 10, Const 5)
+eval (Cell(Const 1, Cell(Const 2, Cell(Const 3, Const 0)))) Map.empty -> Cell(Const 1, Cell(Const 2, Cell(Const 3, Const 0)))
+eval (Car(Cell(Const 10, Const 5))) Map.empty -> Const 10
+eval (Cdr(Cell(Const 10, Const 5))) Map.empty -> Const 5
+eval (Cdr(Const 10)) Map.empty -> error
+eval (Cdr(Fun("x", Var "x", Map.empty))) Map.empty -> error
+eval (Cdr(Cell(Const 10, Fun("x", Var "x", Map.empty)))) Map.empty -> Fun("x", Var "x", Map.empty)
+
+Additional examples will be available shortly.
